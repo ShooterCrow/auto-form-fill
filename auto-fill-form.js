@@ -1,17 +1,17 @@
 const puppeteer = require("puppeteer");
 
-let noOfFills = 2;
+let noOfFills = 1;
 let noOfOptionsToSelect
 
 //Options to cjoose
 const possibleOptions = [
     {
-        optionIds: ["id1", "id2", "id3"],
+        optionIds: ["id1", "id2", "id3", "id4", "id5", "id6", "id77"],
         cb: true,
         submit: false
     },
     {
-        optionIds: ["id4", "id5", "id6"],
+        optionIds: ["ttt", "ttt", "ttt"],
         cb: false,
         submit: true
     }
@@ -19,12 +19,22 @@ const possibleOptions = [
 
 //Random selection
 function randomSelect(option) {
-    let randomOptionSelect = Math.floor(Math.random() * option.length);
+    // console.log(option,option.length)
+    let randomOptionSelect = Math.floor(Math.random() * 7);
     return option[randomOptionSelect];
 }
 
-function delay (fillInterval) {
-    setTimeout(randomSelect , fillInterval);
+function delay(fillInterval) {
+    setTimeout(randomSelect, fillInterval);
+}
+
+function cc (cbs, so, oids) {
+    cbs = randomSelect(oids)
+    if (!so.includes(cbs)) {
+        so.push(cbs)
+        cc()
+        console.log(cbs, so, oids)
+    }
 }
 
 //Automate Fill
@@ -36,21 +46,24 @@ async function fillForm(page) {
         if (cb) {
             let selectedOptions = []
             noOfOptionsToSelect = Math.round(Math.random() * optionIds.length) || 2 //optionIds.length
-            
-            console.log("First NoOfC", noOfOptionsToSelect)
-            for (let i = 0; i < noOfOptionsToSelect; i = i+1) {
+            for (let i = 0; i < noOfOptionsToSelect; i++) {
+                console.log(noOfOptionsToSelect)
                 let currentSelectedOption
-                while (selectedOptions.includes(currentSelectedOption)) {
-                currentSelectedOption = randomSelect(optionIds)
-                    console.log(currentSelectedOption, selectedOptions)
-                }
-                selectedOptions.push(currentSelectedOption);
+                cc(currentSelectedOption, selectedOptions, optionIds)
+                // do {
+                //     currentSelectedOption = randomSelect(optionIds)
+                //     if ((selectedOptions.includes(currentSelectedOption))) {
+                //         console.log("Yes Included")
+                //     }
+                //     selectedOptions.push(currentSelectedOption);
+                //     console.log("Inside Loop", currentSelectedOption, selectedOptions, noOfOptionsToSelect)
+                // } while (!selectedOptions.includes(currentSelectedOption))
             }
         }
     }
 }
 
-async function multipleFill () {
+async function multipleFill() {
     for (let i = 0; i < noOfFills; i++) {
         fillForm()
     }
