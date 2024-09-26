@@ -28,14 +28,6 @@ function delay(fillInterval) {
     setTimeout(randomSelect, fillInterval);
 }
 
-function cc (cbs, so, oids) {
-    cbs = randomSelect(oids)
-    if (!so.includes(cbs)) {
-        so.push(cbs)
-        cc()
-        console.log(cbs, so, oids)
-    }
-}
 
 //Automate Fill
 async function fillForm(page) {
@@ -47,17 +39,15 @@ async function fillForm(page) {
             let selectedOptions = []
             noOfOptionsToSelect = Math.round(Math.random() * optionIds.length) || 2 //optionIds.length
             for (let i = 0; i < noOfOptionsToSelect; i++) {
-                console.log(noOfOptionsToSelect)
                 let currentSelectedOption
-                cc(currentSelectedOption, selectedOptions, optionIds)
-                // do {
-                //     currentSelectedOption = randomSelect(optionIds)
-                //     if ((selectedOptions.includes(currentSelectedOption))) {
-                //         console.log("Yes Included")
-                //     }
-                //     selectedOptions.push(currentSelectedOption);
-                //     console.log("Inside Loop", currentSelectedOption, selectedOptions, noOfOptionsToSelect)
-                // } while (!selectedOptions.includes(currentSelectedOption))
+                do {
+                    currentSelectedOption = randomSelect(optionIds)
+                    if ((selectedOptions.includes(currentSelectedOption))) {
+                        // console.log("Yes Included")
+                    }
+                } while (selectedOptions.includes(currentSelectedOption))
+                selectedOptions.push(currentSelectedOption);
+                console.log("Inside Loop", currentSelectedOption, selectedOptions, noOfOptionsToSelect)
             }
         }
     }
